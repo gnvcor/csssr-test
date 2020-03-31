@@ -13,7 +13,7 @@ import PropTypes from 'prop-types'
 
 const createStore = (reducer, initialState) => {
     let currentState = initialState
-    const listeners = []
+    let listeners = []
 
     const getState = () => currentState
     const dispatch = action => {
@@ -23,12 +23,26 @@ const createStore = (reducer, initialState) => {
 
     const subscribe = listener => listeners.push(listener)
 
-    return { getState, dispatch, subscribe }
+    const unSubscribe = () => (listeners = [])
+
+    return { getState, dispatch, subscribe, unSubscribe }
 }
 
 const connect = (mapStateToProps, mapDispatchToProps) =>
     Component => {
         class WrappedComponent extends React.Component {
+            componentDidMount() {
+                this.context.store.subscribe(this.handleChange)
+            }
+
+            componentWillUnmount () {
+                this.context.store.unSubscribe()
+            }
+
+            handleChange = () => {
+                this.forceUpdate()
+            }
+
             render() {
                 return (
                     <Component
@@ -37,14 +51,6 @@ const connect = (mapStateToProps, mapDispatchToProps) =>
                         {...mapDispatchToProps(this.context.store.dispatch, this.props)}
                     />
                 )
-            }
-
-            componentDidUpdate() {
-                this.context.store.subscribe(this.handleChange)
-            }
-
-            handleChange = () => {
-                this.forceUpdate()
             }
         }
 
