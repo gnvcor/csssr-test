@@ -171,9 +171,14 @@ class TimerComponent extends React.Component {
 
     state = {
         currentTime: 0,
+        disabledStartButton: false,
     }
 
     handleStart() {
+        this.setState({
+            disabledStartButton: true,
+        })
+
         this.timer = setInterval(() => this.setState((state, props) => ({
             currentTime: state.currentTime + this.props.currentInterval,
         })), this.props.currentInterval * 1000)
@@ -181,7 +186,10 @@ class TimerComponent extends React.Component {
 
     handleStop() {
         this.resetTimer()
-        this.setState({ currentTime: 0 })
+        this.setState({
+            currentTime: 0,
+            disabledStartButton: false,
+        })
     }
 
     resetTimer() {
@@ -196,7 +204,7 @@ class TimerComponent extends React.Component {
                     Секундомер: {this.state.currentTime} сек.
                 </div>
                 <div>
-                    <button disabled={this.state.currentTime} onClick={this.handleStart}>
+                    <button disabled={this.state.disabledStartButton} onClick={this.handleStart}>
                         Старт
                     </button>
                     <button onClick={this.handleStop}>Стоп</button>
