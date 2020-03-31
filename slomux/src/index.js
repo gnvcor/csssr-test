@@ -93,7 +93,10 @@ const changeInterval = value => ({
 const reducer = (state, action) => {
     switch(action.type) {
         case CHANGE_INTERVAL:
-            return state += action.payload
+            return {
+                ...state,
+                currentInterval: state.currentInterval + action.payload
+            }
         default:
             return {}
     }
@@ -117,7 +120,7 @@ class IntervalComponent extends React.Component {
 
 const Interval = connect(
     state => ({
-        currentInterval: state,
+        currentInterval: state.currentInterval,
     }),
     dispatch => ({
         changeInterval: value => dispatch(changeInterval(value)),
@@ -163,10 +166,12 @@ class TimerComponent extends React.Component {
 }
 
 const Timer = connect(state => ({
-    currentInterval: state,
+    currentInterval: state.currentInterval,
 }), () => {})(TimerComponent)
 
-const initialState = 1
+const initialState = {
+    currentInterval: 1,
+}
 
 // init
 ReactDOM.render(
