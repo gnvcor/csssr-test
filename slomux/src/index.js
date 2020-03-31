@@ -109,12 +109,14 @@ class IntervalComponent extends React.Component {
     }
 }
 
-const Interval = connect(dispatch => ({
-        changeInterval: value => dispatch(changeInterval(value)),
-    }),
+const Interval = connect(
     state => ({
         currentInterval: state,
-    }))(IntervalComponent)
+    }),
+    dispatch => ({
+        changeInterval: value => dispatch(changeInterval(value)),
+    }),
+)(IntervalComponent)
 
 class TimerComponent extends React.Component {
     constructor(props) {
