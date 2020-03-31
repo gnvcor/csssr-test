@@ -105,13 +105,38 @@ const reducer = (state, action) => {
 // components
 
 class IntervalComponent extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.upInterval = this.upInterval.bind(this)
+        this.downInterval = this.downInterval.bind(this)
+    }
+
+    upInterval() {
+        this.props.changeInterval(1)
+    }
+
+    downInterval() {
+        this.props.changeInterval(-1)
+    }
+
+    get isDisabledDownIntervalButton() {
+        if (this.props.currentInterval > 1) {
+            return false
+        }
+
+        return true
+    }
+
     render() {
         return (
             <div>
                 <span>Интервал обновления секундомера: {this.props.currentInterval} сек.</span>
                 <span>
-                  <button onClick={() => this.props.changeInterval(-1)}>-</button>
-                  <button onClick={() => this.props.changeInterval(1)}>+</button>
+                  <button disabled={this.isDisabledDownIntervalButton} onClick={this.downInterval}>
+                      -
+                  </button>
+                  <button onClick={this.upInterval}>+</button>
                 </span>
             </div>
         )
