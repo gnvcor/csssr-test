@@ -135,21 +135,32 @@ class TimerComponent extends React.Component {
         this.handleStop = this.handleStop.bind(this)
     }
 
+    componentDidUpdate (prevProps) {
+        if (prevProps.currentInterval !== this.props.currentInterval && this.state.currentTime !== 0) {
+            this.resetTimer()
+            this.handleStart()
+        }
+    }
+
     timer = null
 
     state = {
-        currentTime: 0
+        currentTime: 0,
     }
 
     handleStart() {
-        this.timer = setInterval(() => this.setState({
-            currentTime: this.state.currentTime + this.props.currentInterval,
-        }), this.props.currentInterval * 1000)
+        this.timer = setInterval(() => this.setState((state, props) => ({
+            currentTime: state.currentTime + this.props.currentInterval,
+        })), this.props.currentInterval * 1000)
     }
 
     handleStop() {
-        clearInterval(this.timer)
+        this.resetTimer()
         this.setState({ currentTime: 0 })
+    }
+
+    resetTimer() {
+        clearInterval(this.timer)
     }
 
     render() {
