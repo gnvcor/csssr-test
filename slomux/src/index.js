@@ -117,8 +117,25 @@ const Interval = connect(dispatch => ({
     }))(IntervalComponent)
 
 class TimerComponent extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.handleStart = this.handleStart.bind(this)
+        this.handleStop = this.handleStop.bind(this)
+    }
+
     state = {
         currentTime: 0
+    }
+
+    handleStart() {
+        setTimeout(() => this.setState({
+            currentTime: this.state.currentTime + this.props.currentInterval,
+        }), this.props.currentInterval)
+    }
+
+    handleStop() {
+        this.setState({ currentTime: 0 })
     }
 
     render() {
@@ -134,16 +151,6 @@ class TimerComponent extends React.Component {
                 </div>
             </div>
         )
-    }
-
-    handleStart() {
-        setTimeout(() => this.setState({
-            currentTime: this.state.currentTime + this.props.currentInterval,
-        }), this.props.currentInterval)
-    }
-
-    handleStop() {
-        this.setState({ currentTime: 0 })
     }
 }
 
