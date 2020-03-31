@@ -171,7 +171,9 @@ class TimerComponent extends React.Component {
                     Секундомер: {this.state.currentTime} сек.
                 </div>
                 <div>
-                    <button onClick={this.handleStart}>Старт</button>
+                    <button disabled={this.state.currentTime} onClick={this.handleStart}>
+                        Старт
+                    </button>
                     <button onClick={this.handleStop}>Стоп</button>
                 </div>
             </div>
